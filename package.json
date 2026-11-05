@@ -1,0 +1,12 @@
+{
+  "name": "ai-customer-support-platform",
+  "version": "1.0.0",
+  "description": "Production-ready AI-first customer support platform",
+  "scripts": {
+    "dev": "docker-compose up",
+    "build": "docker-compose build",
+    "down": "docker-compose down",
+    "migrate": "cd backend && alembic upgrade head",
+    "migrate:create": "cd backend && alembic revision --autogenerate"
+  }
+}
