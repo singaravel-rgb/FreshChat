@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import structlog
-
-logger = structlog.get_logger()
+from app.core.config import settings
+from app.api.v1.router import api_router
 
 app = FastAPI(
     title="AI Customer Support Platform API",
@@ -12,19 +11,20 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+app.include_router(api_router, prefix=settings.API_V1_PREFIX)
+
 @app.get("/")
 async def root():
     return {"message": "AI Customer Support Platform API", "version": "1.0.0", "docs": "/docs"}
 
-@app.get("/api/v1/health")
+@app.get(f"{settings.API_V1_PREFIX}/health")
 async def health():
     return {"status": "healthy", "service": "backend"}
