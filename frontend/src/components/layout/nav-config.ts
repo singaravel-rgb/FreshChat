@@ -32,9 +32,9 @@ export const navGroups: NavGroup[] = [
     title: 'Primary',
     items: [
       { label: 'Inbox', href: '/inbox', icon: Inbox },
-      { label: 'Conversations', href: '/inbox', icon: MessageSquare },
-      { label: 'Mentions', href: '/inbox', icon: AtSign },
-      { label: 'Unassigned', href: '/inbox', icon: UserX },
+      { label: 'Conversations', href: '/conversations', icon: MessageSquare },
+      { label: 'Mentions', href: '/mentions', icon: AtSign },
+      { label: 'Unassigned', href: '/unassigned', icon: UserX },
     ],
   },
   {

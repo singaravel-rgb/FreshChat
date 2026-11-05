@@ -9,19 +9,30 @@ import { Tooltip } from '@/components/ui/tooltip'
 import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 
-export function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
+export function Sidebar({
+  collapsed,
+  onToggle,
+  onNavigate,
+  className,
+}: {
+  collapsed: boolean
+  onToggle: () => void
+  onNavigate?: () => void
+  className?: string
+}) {
   const pathname = usePathname()
 
   return (
     <aside
       className={cn(
-        'fixed inset-y-0 left-0 z-40 flex flex-col border-r border-slate-200 bg-white transition-[width] duration-180 ease-out',
-        collapsed ? 'w-sidebar-collapsed' : 'w-sidebar'
+        'flex h-full flex-col border-r border-slate-200 bg-white transition-[width] duration-180 ease-out',
+        collapsed ? 'w-sidebar-collapsed' : 'w-sidebar',
+        className
       )}
       aria-label="Primary navigation"
     >
       <div className={cn('flex h-14 items-center border-b border-slate-200', collapsed ? 'justify-center px-2' : 'justify-between px-3')}>
-        <Link href="/inbox" className="flex items-center gap-2 overflow-hidden" aria-label="Home">
+        <Link href="/inbox" onClick={onNavigate} className="flex items-center gap-2 overflow-hidden" aria-label="Home">
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-white">
             <Headset size={16} />
           </span>
@@ -40,12 +51,12 @@ export function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle:
             {!collapsed && <p className="mb-1 px-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">{group.title}</p>}
             <ul className="space-y-0.5">
               {group.items.map((item) => {
-                const active = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href) && item.href !== '/admin/dashboard' && item.href !== '/inbox' ? false : pathname === item.href)
                 const isActive = pathname === item.href
                 const Icon = item.icon
                 const link = (
                   <Link
                     href={item.href}
+                    onClick={onNavigate}
                     className={cn(
                       'group flex items-center rounded-lg text-sm font-medium transition-colors',
                       collapsed ? 'justify-center px-0 py-2.5' : 'gap-2.5 px-2 py-2',
