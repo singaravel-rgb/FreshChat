@@ -1,70 +1,44 @@
 'use client'
 
-import { useState } from 'react'
-import { Users, MessageSquare, Clock, AlertCircle, CheckCircle } from 'lucide-react'
+import { AppShell } from '@/components/layout/AppShell'
+import { Card } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Users, Bot, Sliders, Globe, Bell, Shield, BookOpen, Settings } from 'lucide-react'
 
-export default function AdminDashboard() {
-  const stats = [
-    { label: 'Total Conversations', value: '1,234', icon: MessageSquare, color: 'blue' },
-    { label: 'Active Agents', value: '12', icon: Users, color: 'green' },
-    { label: 'Pending Approval', value: '3', icon: Clock, color: 'yellow' },
-    { label: 'SLA Breached', value: '2', icon: AlertCircle, color: 'red' },
-  ]
+const sections = [
+  { title: 'General Settings', desc: 'Organization, branding, and defaults.', icon: Settings },
+  { title: 'Users & Permissions', desc: 'Roles, approvals, and access control.', icon: Users },
+  { title: 'Teams & Assignment', desc: 'Routing rules and workload limits.', icon: Sliders },
+  { title: 'AI Configuration', desc: 'AI-first behavior, knowledge, and kill switch.', icon: Bot, badge: 'Admin' },
+  { title: 'Channels', desc: 'Website chat, widget, and future channels.', icon: Globe },
+  { title: 'Help Center & FAQs', desc: 'Articles, categories, and chat-from-FAQ.', icon: BookOpen },
+  { title: 'Notifications', desc: 'Agent alerts and escalation events.', icon: Bell },
+  { title: 'Security & Integrations', desc: 'Audit, API keys, and integrations.', icon: Shield },
+]
 
+export default function AdminDashboardPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <h1 className="text-xl font-semibold">Admin Portal</h1>
-      </header>
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat) => (
-            <div key={stat.label} className="bg-white p-6 rounded-lg border border-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">{stat.label}</p>
-                  <p className="text-2xl font-semibold mt-1">{stat.value}</p>
-                </div>
-                <stat.icon className={`text-${stat.color}-600`} size={24} />
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h2 className="font-semibold mb-4">Quick Actions</h2>
-            <div className="space-y-2">
-              <button className="w-full text-left px-4 py-2 hover:bg-gray-50 rounded-lg">Manage Employees</button>
-              <button className="w-full text-left px-4 py-2 hover:bg-gray-50 rounded-lg">Approve Pending Users</button>
-              <button className="w-full text-left px-4 py-2 hover:bg-gray-50 rounded-lg">AI Settings</button>
-              <button className="w-full text-left px-4 py-2 hover:bg-gray-50 rounded-lg">View Audit Logs</button>
-            </div>
+    <AppShell header={<Badge variant="muted">Admin</Badge>}>
+      <div className="app-scrollbar h-full overflow-y-auto bg-slate-50 p-6">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-5">
+            <h1 className="text-xl font-semibold tracking-tight text-slate-900">Admin Settings</h1>
+            <p className="mt-1 text-sm text-slate-500">Configure the platform. Changes should be backed by admin APIs and permissions.</p>
           </div>
-          <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h2 className="font-semibold mb-4">System Status</h2>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm">AI Service</span>
-                <span className="flex items-center gap-1 text-green-600 text-sm">
-                  <CheckCircle size={16} /> Enabled
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Database</span>
-                <span className="flex items-center gap-1 text-green-600 text-sm">
-                  <CheckCircle size={16} /> Healthy
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Redis</span>
-                <span className="flex items-center gap-1 text-green-600 text-sm">
-                  <CheckCircle size={16} /> Connected
-                </span>
-              </div>
-            </div>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {sections.map((s) => (
+              <Card key={s.title} className="cursor-pointer p-4 transition-colors hover:border-slate-300 hover:bg-white">
+                <div className="flex items-start justify-between gap-3">
+                  <span className="rounded-lg bg-slate-100 p-2 text-slate-700"><s.icon size={18} /></span>
+                  {s.badge && <Badge variant="purple">{s.badge}</Badge>}
+                </div>
+                <h2 className="mt-3 text-sm font-semibold text-slate-900">{s.title}</h2>
+                <p className="mt-1 text-sm text-slate-500">{s.desc}</p>
+              </Card>
+            ))}
           </div>
         </div>
       </div>
-    </div>
+    </AppShell>
   )
 }

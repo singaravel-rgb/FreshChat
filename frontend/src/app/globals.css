@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: 248 250 252;
+  --color-surface: 255 255 255;
+  --color-border: 226 232 240;
+  --color-text: 15 23 42;
+  --color-text-muted: 71 85 105;
+  --color-brand: 37 99 235;
+  --sidebar-width: 15rem;
+  --sidebar-collapsed-width: 4.75rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply h-full;
+  }
+  body {
+    @apply h-full bg-slate-50 text-slate-900 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  ::selection {
+    @apply bg-brand-100 text-brand-900;
+  }
+}
+
+@layer components {
+  .app-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+  .app-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .app-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  .app-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}

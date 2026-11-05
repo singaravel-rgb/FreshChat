@@ -1,42 +1,36 @@
 'use client'
 
-import Link from 'next/link'
-import { useAuthStore } from '@/lib/auth/store'
+import { AppShell } from '@/components/layout/AppShell'
+import { Card } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 export default function AgentWorkspacePage() {
-  const { user, logout } = useAuthStore()
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold">Agent Workspace</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">{user?.email}</span>
-            <button onClick={logout} className="text-sm text-red-600 hover:text-red-700">
-              Logout
-            </button>
+    <AppShell header={<Badge variant="success">Available</Badge>}>
+      <div className="app-scrollbar h-full overflow-y-auto bg-slate-50 p-6">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-semibold tracking-tight text-slate-900">Agent Workspace</h1>
+              <p className="mt-1 text-sm text-slate-500">Manage your queue, availability, and assigned conversations.</p>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm">Set Busy</Button>
+              <Button size="sm">Go to Inbox</Button>
+            </div>
           </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            <Card className="p-4"><p className="text-sm text-slate-500">Assigned to you</p><p className="mt-1 text-2xl font-semibold">3</p></Card>
+            <Card className="p-4"><p className="text-sm text-slate-500">Capacity</p><p className="mt-1 text-2xl font-semibold">3 / 5</p></Card>
+            <Card className="p-4"><p className="text-sm text-slate-500">Avg response</p><p className="mt-1 text-2xl font-semibold">2m 18s</p></Card>
+          </div>
+          <Card className="mt-4 p-4">
+            <h2 className="text-sm font-semibold text-slate-900">Personal queue</h2>
+            <p className="mt-2 text-sm text-slate-500">Assigned conversations appear in your Inbox. This workspace will show your activity, status controls, and performance as backend data is connected.</p>
+          </Card>
         </div>
-      </header>
-      <div className="flex h-[calc(100vh-64px)]">
-        <aside className="w-80 bg-white border-r border-gray-200">
-          <div className="p-4">
-            <h2 className="font-semibold mb-4">Inbox</h2>
-            <div className="text-sm text-gray-500">No conversations</div>
-          </div>
-        </aside>
-        <main className="flex-1 flex flex-col">
-          <div className="flex-1 p-6">
-            <div className="text-center text-gray-500 mt-20">Select a conversation</div>
-          </div>
-        </main>
-        <aside className="w-80 bg-white border-l border-gray-200">
-          <div className="p-4">
-            <h2 className="font-semibold mb-4">Customer Details</h2>
-          </div>
-        </aside>
       </div>
-    </div>
+    </AppShell>
   )
 }

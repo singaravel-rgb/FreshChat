@@ -1,51 +1,41 @@
 'use client'
 
-import { InboxList } from '@/features/inbox/InboxList'
+import { useMemo, useState } from 'react'
+import { AppShell } from '@/components/layout/AppShell'
+import { InboxList, type ConversationRow } from '@/features/inbox/InboxList'
 import { ConversationThread } from '@/features/inbox/ConversationThread'
 import { CustomerPanel } from '@/features/inbox/CustomerPanel'
-import { Bell, User, ChevronDown } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+
+const conversations: ConversationRow[] = [
+  { id: '4832', customer: 'John Doe', email: 'john.doe@example.com', preview: 'Hi, my order #4832 has not arrived yet. Can you help?', status: 'queued_human', priority: 'high', channel: 'Web Chat', unread: 1, tags: ['Delivery'], ai: true, time: '2m', sla: '12m' },
+  { id: '4831', customer: 'Sarah Smith', email: 'sarah@acme.com', preview: 'I need to update billing details for my account.', status: 'ai_handling', priority: 'normal', channel: 'Web Chat', tags: ['Billing'], ai: true, time: '8m', sla: '28m' },
+  { id: '4830', customer: 'Mike Johnson', email: 'mike@example.com', preview: 'Thanks, that resolved my issue.', status: 'assigned', priority: 'normal', channel: 'Web Chat', tags: [], ai: false, time: '25m' },
+  { id: '4829', customer: 'Priya Patel', email: 'priya@example.com', preview: 'Can I change my subscription plan?', status: 'in_progress', priority: 'urgent', channel: 'Web Chat', tags: ['Plan'], ai: true, time: '1h', sla: '4m' },
+]
 
 export default function InboxPage() {
+  const [selectedId, setSelectedId] = useState<string | null>(conversations[0]?.id ?? null)
+  const [detailsCollapsed, setDetailsCollapsed] = useState(false)
+
+  const selected = useMemo(() => conversations.find((c) => c.id === selectedId) ?? null, [selectedId])
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-lg font-semibold">Support Inbox</h1>
-            <select className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg">
-              <option>All Conversations</option>
-              <option>Open</option>
-              <option>Queue</option>
-              <option>Pending</option>
-              <option>AI Chats</option>
-            </select>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm">
-              <Bell size={18} />
-            </Button>
-            <div className="flex items-center gap-2 px-3 py-1.5 hover:bg-gray-50 rounded-lg cursor-pointer">
-              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                <User size={16} className="text-blue-600" />
-              </div>
-              <span className="text-sm">Agent</span>
-              <ChevronDown size={16} />
-            </div>
-          </div>
+    <AppShell
+      header={
+        <div className="hidden items-center gap-2 sm:flex">
+          <Badge variant="brand">Inbox</Badge>
+          <span className="text-sm text-slate-500">{conversations.length} open</span>
         </div>
-      </header>
-      <div className="flex h-[calc(100vh-57px)] gap-0">
-        <div className="w-80 flex-shrink-0">
-          <InboxList />
+      }
+    >
+      <div className="flex h-full min-h-0 bg-white">
+        <div className="w-[340px] shrink-0">
+          <InboxList conversations={conversations} selectedId={selectedId} onSelect={setSelectedId} />
         </div>
-        <div className="flex-1">
-          <ConversationThread />
-        </div>
-        <div className="w-80 flex-shrink-0">
-          <CustomerPanel />
-        </div>
+        <ConversationThread conversationId={selectedId} customerName={selected?.customer} />
+        <CustomerPanel collapsed={detailsCollapsed} onToggle={() => setDetailsCollapsed((v) => !v)} />
       </div>
-    </div>
+    </AppShell>
   )
 }

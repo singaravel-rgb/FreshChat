@@ -1,117 +1,84 @@
 'use client'
 
-import { MessageCircle, Search, ArrowRight } from 'lucide-react'
+import { useState } from 'react'
+import { MessageCircle, Search, ArrowRight, Headset } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
-import Link from 'next/link'
-import { useState } from 'react'
+import { Badge } from '@/components/ui/badge'
+import ChatWidget from '@/features/chat-widget/ChatWidget'
 
 const faqs = [
-  { id: 1, category: 'Getting Started', question: 'How do I get started with the platform?', answer: 'Sign up for an account and follow our onboarding guide.' },
-  { id: 2, category: 'Account', question: 'How do I reset my password?', answer: 'Click "Forgot Password" on the login page and check your email.' },
-  { id: 3, category: 'Billing', question: 'What payment methods do you accept?', answer: 'We accept all major credit cards and PayPal.' },
-  { id: 4, category: 'Support', question: 'How can I contact support?', answer: 'Use the chat widget or this help center.' },
+  { id: 1, category: 'Getting Started', question: 'How do I get started with the platform?', answer: 'Sign up for an account and follow the onboarding guide. An admin may need to approve access depending on your organization settings.' },
+  { id: 2, category: 'Account', question: 'How do I reset my password?', answer: 'Use “Forgot Password” on the login page. If your account is managed by an admin, contact your support team.' },
+  { id: 3, category: 'Conversations', question: 'How does AI handle my message?', answer: 'Every conversation is evaluated by AI first. If the request can be resolved safely using approved knowledge, AI responds. Otherwise it escalates to a human agent with context.' },
+  { id: 4, category: 'Support', question: 'Can I talk to a human agent?', answer: 'Yes. Ask for a human at any time, or use the chat option on an article to start a conversation with context.' },
 ]
 
 export default function HelpCenterPage() {
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
-
-  const categories = ['All', ...Array.from(new Set(faqs.map(f => f.category)))]
-
-  const filteredFaqs = faqs.filter(faq => {
-    const matchesSearch = faq.question.toLowerCase().includes(search.toLowerCase()) ||
-                         faq.answer.toLowerCase().includes(search.toLowerCase())
+  const categories = ['All', ...Array.from(new Set(faqs.map((f) => f.category)))]
+  const filteredFaqs = faqs.filter((faq) => {
+    const matchesSearch = faq.question.toLowerCase().includes(search.toLowerCase()) || faq.answer.toLowerCase().includes(search.toLowerCase())
     const matchesCategory = selectedCategory === 'All' || faq.category === selectedCategory
     return matchesSearch && matchesCategory
   })
 
-  const handleChatFromFaq = (faq: any) => {
-    // Context transfer to chat
-    console.log('Start chat with FAQ context:', faq)
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-5xl mx-auto px-6 py-12 text-center">
-          <h1 className="text-3xl font-bold mb-2">Help & Support Center</h1>
-          <p className="text-gray-600 mb-8">Search our knowledge base or chat with our support team</p>
-          <div className="relative max-w-2xl mx-auto">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-            <Input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search for answers..."
-              className="pl-12 h-12 text-base"
-            />
+    <div className="min-h-screen bg-slate-50">
+      <header className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-2">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-white"><Headset size={16} /></span>
+            <span className="text-sm font-semibold text-slate-900">Help Center</span>
+          </div>
+          <Badge variant="brand">AI-first support</Badge>
+        </div>
+        <div className="mx-auto max-w-3xl px-6 pb-10 pt-6 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">How can we help?</h1>
+          <p className="mt-2 text-sm text-slate-500">Search approved answers or start a conversation. AI assists first; a human agent can take over when needed.</p>
+          <div className="relative mt-6">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search articles and FAQs..." className="h-11 pl-10" aria-label="Search help center" />
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 py-8">
-        <section className="mb-8">
-          <Card className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-semibold mb-1">Need immediate assistance?</h2>
-                <p className="text-gray-600">Our AI-powered support is available 24/7</p>
+      <main className="mx-auto max-w-5xl px-6 py-8">
+        <Card className="mb-6 flex flex-col items-start justify-between gap-4 p-5 sm:flex-row sm:items-center">
+          <div>
+            <h2 className="text-sm font-semibold text-slate-900">Need more help?</h2>
+            <p className="mt-1 text-sm text-slate-500">Start a chat with AI-powered support. Escalation to a human agent is available when required.</p>
+          </div>
+          <Button><MessageCircle size={16} />Chat with us</Button>
+        </Card>
+
+        <div className="mb-4 flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <button key={cat} type="button" onClick={() => setSelectedCategory(cat)} className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${selectedCategory === cat ? 'bg-brand-600 text-white' : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'}`}>
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <div className="space-y-3">
+          {filteredFaqs.map((faq) => (
+            <Card key={faq.id} className="p-5">
+              <div className="mb-2 flex items-center gap-2">
+                <Badge variant="muted">{faq.category}</Badge>
               </div>
-              <Button size="lg">
-                <MessageCircle size={18} className="mr-2" />
-                Chat with us
-              </Button>
-            </div>
-          </Card>
-        </section>
-
-        <section className="mb-6">
-          <div className="flex flex-wrap gap-2">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  selectedCategory === cat
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                {cat}
+              <h3 className="text-base font-semibold text-slate-900">{faq.question}</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{faq.answer}</p>
+              <button type="button" className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:text-brand-700">
+                <MessageCircle size={15} />Chat with us about this<ArrowRight size={14} />
               </button>
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-semibold mb-4">
-            {selectedCategory === 'All' ? 'Frequently Asked Questions' : selectedCategory}
-          </h2>
-          <div className="space-y-3">
-            {filteredFaqs.map(faq => (
-              <Card key={faq.id} className="p-6">
-                <h3 className="font-semibold mb-2 text-lg">{faq.question}</h3>
-                <p className="text-gray-600 mb-4 leading-relaxed">{faq.answer}</p>
-                <button
-                  onClick={() => handleChatFromFaq(faq)}
-                  className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1 transition-colors"
-                >
-                  <MessageCircle size={16} />
-                  Chat with us about this
-                  <ArrowRight size={14} />
-                </button>
-              </Card>
-            ))}
-          </div>
-          {filteredFaqs.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              <p>No results found. Try adjusting your search or chat with us directly.</p>
-            </div>
-          )}
-        </section>
+            </Card>
+          ))}
+          {filteredFaqs.length === 0 && <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">No articles found. Try a different search or start a chat.</div>}
+        </div>
       </main>
+      <ChatWidget />
     </div>
   )
 }
